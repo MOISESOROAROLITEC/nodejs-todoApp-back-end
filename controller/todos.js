@@ -127,7 +127,7 @@ const deleteOneTodo = async (req, res) => {
 }
 const deleteAllTodoOfUser = async (req, res) => {
 	try {
-		const todo = await Todo.deleteMany({ title: "test" });
+		const todo = await Todo.deleteMany({ public: "false" });
 		if (!todo || todo.length == 0)
 			return res.status(404).json({ massage: `You have not ` });
 		return res.json({ todo, message: "The task was successfully deleted" })
