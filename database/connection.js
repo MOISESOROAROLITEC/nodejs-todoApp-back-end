@@ -2,7 +2,7 @@ const { default: chalk } = require("chalk");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const connect = async () => {
+const connectDB = async () => {
 	try {
 		await mongoose.connect(process.env.DB_URI)
 		console.log(chalk.blue("connection to database :", chalk.bold.blue("succes")));
@@ -11,4 +11,4 @@ const connect = async () => {
 	}
 }
 
-module.exports = connect
+module.exports = connectDB
