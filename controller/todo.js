@@ -135,12 +135,10 @@ const deleteAllTodoOfUser = async (req, res) => {
 		return res.status(500).json({ message: "server was crashed" })
 	}
 }
-
 const NotFoundUri = (req, res) => {
-	res.status(404).send({
-		message: "The url : " + req.rawHeaders[7] + req.url + " is not found",
-		code: 404
-	})
+	res.status(404).send(
+		{ message: "The url : " + req.rawHeaders[7] + req.url + " is not found", code: 404 }
+	);
 }
 
 module.exports = {

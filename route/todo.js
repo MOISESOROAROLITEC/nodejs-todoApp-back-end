@@ -7,20 +7,20 @@ const {
 	deleteOneTodo, deleteAllTodoOfUser,
 } = require("../controller/todo");
 
-const router = express.Router();
-router.get("/todo/getAll", getAll);
-router.get("/todo/userTodos", getUserTodos);
-router.get("/todo/publicTodos", getPublicTodos);
-router.get("/todo/getAllTodosActif", getAllTodosActif);
-router.get("/todo/getAllTodosInactif", getAllTodosInactif);
-router.get("/todo/getUserTodosActif", getUserTodosActif);
-router.get("/todo/getUserTodosInactif", getUserTodosInactif);
-router.get("/todo/getOne/:id", getOne);
-router.delete("/todo/deleteOneTodo/:id", deleteOneTodo);
-router.delete("/todo/deleteAllTodoOfUser", deleteAllTodoOfUser);
+const todosRoutes = express.Router();
+todosRoutes.get("/todo/get-all", getAll);
+todosRoutes.get("/todo/userTodos", getUserTodos);
+todosRoutes.get("/todo/publicTodos", getPublicTodos);
+todosRoutes.get("/todo/getAllTodosActif", getAllTodosActif);
+todosRoutes.get("/todo/getAllTodosInactif", getAllTodosInactif);
+todosRoutes.get("/todo/getUserTodosActif", getUserTodosActif);
+todosRoutes.get("/todo/getUserTodosInactif", getUserTodosInactif);
+todosRoutes.get("/todo/getOne/:id", getOne);
+todosRoutes.delete("/todo/deleteOneTodo/:id", deleteOneTodo);
+todosRoutes.delete("/todo/deleteAllTodoOfUser", deleteAllTodoOfUser);
 
 
-router.post("/todo/createTodo", createTodo)
-router.get("*", NotFoundUri);
+todosRoutes.post("/todo/createTodo", createTodo)
+// todosRoutes.get("*", NotFoundUri);
 
-module.exports = router;
+module.exports = todosRoutes;
