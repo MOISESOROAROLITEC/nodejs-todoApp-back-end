@@ -1,17 +1,13 @@
-const { default: chalk } = require("chalk");
 const express = require("express");
-const { default: mongoose } = require("mongoose");
 const {
 	getOne, NotFoundUri, getUserTodos,
 	getAll, createTodo, getPublicTodos,
 	getAllTodosActif, getUserTodosActif,
 	getAllTodosInactif, getUserTodosInactif,
 	deleteOneTodo, deleteAllTodoOfUser,
-} = require("../controller/todos");
+} = require("../controller/todo");
 
 const router = express.Router();
-const Todo = require("../model/todo")
-
 router.get("/todo/getAll", getAll);
 router.get("/todo/userTodos", getUserTodos);
 router.get("/todo/publicTodos", getPublicTodos);
