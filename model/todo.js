@@ -13,7 +13,6 @@ const todoSchema = new mongoose.Schema({
 		trim: true,
 		required: [true, "todo title is required"],
 		validate: function (val) {
-			console.log("La valeur est :", this);
 			this.title = this.title.slice(0, 50)
 		}
 	},

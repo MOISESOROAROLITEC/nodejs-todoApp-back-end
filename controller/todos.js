@@ -8,7 +8,7 @@ const getAll = async (req, res) => {
 		if (!todos || todos.length == 0) {
 			return res.status(404).json({ message: "You have not a todo" });
 		}
-		res.status(200).send(todos);
+		return res.status(200).send({ todos, length: todos.length });
 	} catch (err) {
 		console.log(chalk.red(err));
 		return res.status(500).json({ message: "Error to get all todos" })
@@ -45,7 +45,7 @@ const getPublicTodos = async (req, res) => {
 const getOne = async (req, res) => {
 	try {
 		if (!mongoose.Types.ObjectId.isValid(req.params.id))
-			return res.status(404).json({ message: "Todo id format is incorect" })
+			return res.status(404).json({ message: "Todo id format is not correct" })
 		const todos = await Todo.findById(req.params.id);
 		if (!todos) {
 			return res.status(404).send({ message: req.params.id + "can not find" })
@@ -104,22 +104,38 @@ const getUserTodosInactif = async (req, res) => {
 		return res.status(500).json({ message: "Error to get all user actif todos" })
 	}
 }
-
-const createPublicTodo = async (req, res) => {
+const createTodo = async (req, res) => {
 	try {
 		const { title, description, public, active, status } = req.body
 		const todo = new Todo({ title: title, description: description, public: public, active: active, status: status });
-		await todo.save().then(val => {
-		}).catch(err => {
-			return res.status(500).json({ message: "Tis todo can not been registering" })
-		});
-
-		return res.status(200).json({ message: "saving succesfull" })
+		const todoSave = await todo.save();
+		return res.status(200).json({ todo: todoSave, message: "saving succesfull" })
 	} catch (err) {
 		console.log(chalk.red(err));
 		return res.status(500).json({ message: "Tis todo can not been registering" })
 	}
 }
+const deleteOneTodo = async (req, res) => {
+	try {
+		const todo = await Todo.findByIdAndDelete(req.params.id);
+		if (!todo)
+			return res.status(404).json({ massage: `The todo with id = ${req.params.id} was not found` });
+		return res.json({ todo, message: "The task was successfully deleted" })
+	} catch (error) {
+		return res.status(500).json({ message: "server was crashed" })
+	}
+}
+const deleteAllTodoOfUser = async (req, res) => {
+	try {
+		const todo = await Todo.deleteMany({ title: "test" });
+		if (!todo || todo.length == 0)
+			return res.status(404).json({ massage: `You have not ` });
+		return res.json({ todo, message: "The task was successfully deleted" })
+	} catch (error) {
+		return res.status(500).json({ message: "server was crashed" })
+	}
+}
+
 const NotFoundUri = (req, res) => {
 	res.status(404).send({
 		message: "The url : " + req.rawHeaders[7] + req.url + " is not found",
@@ -131,12 +147,13 @@ module.exports = {
 	getOne,
 	getUserTodos,
 	getAll,
-	createPublicTodo,
+	createTodo,
 	getPublicTodos,
 	getAllTodosActif,
 	getAllTodosInactif,
 	getUserTodosActif,
 	getUserTodosInactif,
-
+	deleteOneTodo,
+	deleteAllTodoOfUser,
 	NotFoundUri,
 }
