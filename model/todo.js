@@ -1,11 +1,6 @@
 const mongoose = require("mongoose");
 
 const todoSchema = new mongoose.Schema({
-	id: {
-		type: Number,
-		unique: true,
-		index: true,
-	},
 	title: {
 		type: String,
 		minLength: [3, "todo title must been longer than 2 character"],
@@ -20,11 +15,11 @@ const todoSchema = new mongoose.Schema({
 		type: String,
 		trim: true,
 	},
-	active: {
+	deleted: {
 		type: Boolean,
 		default: true
 	},
-	status: {
+	done: {
 		type: Boolean,
 		default: false
 	},
