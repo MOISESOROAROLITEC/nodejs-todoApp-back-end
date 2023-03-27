@@ -45,7 +45,7 @@ const getPublicTodos = async (req, res) => {
 const getOne = async (req, res) => {
 	try {
 		if (!mongoose.Types.ObjectId.isValid(req.params.id))
-			return res.status(404).json({ message: "Todo id format is not correct" })
+			return res.status(400).json({ message: "Todo id format is not correct" })
 		const todos = await Todo.findById(req.params.id);
 		if (!todos) {
 			return res.status(404).send({ message: req.params.id + "can not find" })
