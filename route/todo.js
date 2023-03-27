@@ -18,9 +18,6 @@ todosRoutes.get("/todo/getUserTodosInactif", getUserTodosInactif);
 todosRoutes.get("/todo/getOne/:id", getOne);
 todosRoutes.delete("/todo/deleteOneTodo/:id", deleteOneTodo);
 todosRoutes.delete("/todo/deleteAllTodoOfUser", deleteAllTodoOfUser);
-
-
 todosRoutes.post("/todo/createTodo", createTodo)
-// todosRoutes.get("*", NotFoundUri);
 
 module.exports = todosRoutes;

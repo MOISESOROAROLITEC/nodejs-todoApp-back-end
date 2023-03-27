@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require('bcrypt')
+const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
 	name: {
@@ -24,20 +25,30 @@ const userSchema = new mongoose.Schema({
 	},
 	password: {
 		type: String,
-		required: [true, "User name is required"],
-		validate: {
-			validator: function (v) {
-				return v.length >= 8 && v.length < 50;
-			},
-			message: props => `${props.value} is not a valid password, it should be between 8 and 50 characters`
-		}
+		required: [true, "User name is required"]
 	},
 	image: {
 		type: Buffer,
-	}
+	},
+	tokens: [{
+		token: {
+			type: String,
+			required: true
+		}
+	}]
 },
 	{ timestamps: true }
 )
+
+userSchema.methods.generateAuthTokenAndSaveUser = async function () {
+	const token = jwt.sign({ _id: this._id.toString() }, "theSecretKey");
+
+	if (!this.tokens || this.tokens.length == 0) {
+		this.tokens.push({ token });
+	}
+	await this.save();
+	return token;
+}
 
 userSchema.pre("save", async function (next) {
 	const user = this;

@@ -10,6 +10,7 @@ const signup = async (req, res) => {
 			password: req.body.password
 		});
 		userSave = await user.save();
+
 		return res.status(200).json({ user: userSave, message: "user creating success" });
 	} catch (error) {
 		const err = `${error}`;
@@ -20,7 +21,7 @@ const signin = async (req, res) => {
 	try {
 		const { email, password } = req.body;
 		if (!email || !password) {
-			return res.status(400).json({ message: "You should provide email and password" });
+			return res.status(400).json({ message: "You should provide email and password field" });
 		}
 		const user = await User.findOne({ email });
 		if (!user || user.length == 0) {
@@ -28,14 +29,14 @@ const signin = async (req, res) => {
 		}
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (isMatch) {
-			return res.status(200).json(user);
+			const token = await user.generateAuthTokenAndSaveUser();
+			return res.status(200).json({ user, message: "connected with success", token });
 		}
 		return res.status(400).json({ message: "Retry again, email or password are wrong" });
 	} catch (error) {
 		return res.status(500).json({ message: "Server Error", error: `${error}` });
 	}
 }
-
 const update = async (req, res) => {
 	try {
 		const keys = Object.keys(req.body);
@@ -49,7 +50,7 @@ const update = async (req, res) => {
 			})
 		}
 		if (req.body["password"]) {
-			if (req.body.password) {
+			if (req.body.password.length < 8 || req.body.password.length > 50) {
 				return res.status(400).json({
 					message: "the password not valid, it should be between 8 and 50 characters"
 				})
