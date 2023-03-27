@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-// const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt')
 
 const userSchema = new mongoose.Schema({
 	name: {
@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
 		trim: true,
 		required: [true, "User name is required"],
 		unique: true,
+		lowercase: true,
 		validate: {
 			validator: function (v) {
 				return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);

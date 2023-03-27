@@ -14,10 +14,10 @@ const app = express();
 connectDB();
 app.use(bodyParser.json()) // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }))
-app.get("/", (req, resp) => { resp.status(200).send("<h1>Home Page</h1>") });
+app.get("/", (req, res) => { res.status(200).send("<h1>Home Page</h1>") });
 app.use("/", todoRoutes);
 app.use("/", userRoutes);
-// app.get("*", (req, res) => { res.status(404).send({ message: "The url : " + req.rawHeaders[7] + req.url + " is not found", code: 404 }) })
+app.get("*", (req, res) => { res.status(404).send({ message: "The url : " + `localhost:${PORT}` + req.url + " is not found", code: 404 }) })
 
 console.log(app.route)
 
