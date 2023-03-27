@@ -24,9 +24,13 @@ const userSchema = new mongoose.Schema({
 	},
 	password: {
 		type: String,
-		minLength: [8, "password must been longer than 7 character"],
-		maxLength: [50, "User name can not be longer than 50 character"],
-		required: [true, "User name is required"]
+		required: [true, "User name is required"],
+		validate: {
+			validator: function (v) {
+				return v.length >= 8 && v.length < 50;
+			},
+			message: props => `${props.value} is not a valid password, it should be between 8 and 50 characters`
+		}
 	},
 	image: {
 		type: Buffer,

@@ -1,5 +1,6 @@
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
+const mongoose = require("mongoose");
 
 const signup = async (req, res) => {
 	try {
@@ -36,7 +37,6 @@ const signin = async (req, res) => {
 }
 
 const update = async (req, res) => {
-	console.log(req.params);
 	try {
 		const keys = Object.keys(req.body);
 		const availableKeys = ["name", "email", "password", "image"];
@@ -48,17 +48,40 @@ const update = async (req, res) => {
 				availableIdendifiers: { name: String, email: String, password: String, image: Buffer }
 			})
 		}
-		const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+		if (req.body["password"]) {
+			if (req.body.password) {
+				return res.status(400).json({
+					message: "the password not valid, it should be between 8 and 50 characters"
+				})
+			}
+			req.body["password"] = await bcrypt.hash(req.body["password"], 8)
+		};
+		if (!mongoose.Types.ObjectId.isValid(req.params.id))
+			return res.status(400).json({ message: "User id format is not correct" })
+		const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
 		if (user) {
 			return res.status(200).json({ user, message: "user updating with success" });
 		} else {
 			return res.status(404).json({ message: `can not find user with id ${req.params.id}` });
 		}
 	} catch (error) {
-		return res.status(500).json({ message: "Error to update user", error: `${error}` });
+		const err = `${error}`
+		return res.status(500).json({ message: "Error to update user", error: err });
 	}
 }
 
-// const
+const get = async (req, res) => {
+	try {
+		if (!mongoose.Types.ObjectId.isValid(req.params.id))
+			return res.status(400).json({ message: "user id format is not correct" })
+		const user = await User.findById(req.params.id)
+		if (!user) {
+			return res.status(404).json({ message: `can not find the user` });
+		}
+		return res.json({ user, message: "user found with success" })
+	} catch (error) {
+		return res.status(500).json({ message: "server was creshed", error: `${error}` })
+	}
+}
 
-module.exports = { signup, signin, update };
+module.exports = { signup, signin, update, get };
