@@ -2,6 +2,7 @@ const chalk = require("chalk");
 const express = require("express");
 const bodyParser = require('body-parser')
 const jwt = require("jsonwebtoken");
+const multer = require('multer');
 require("dotenv").config();
 const todoRoutes = require("./route/todo");
 const connectDB = require('./database/connection');
@@ -10,10 +11,20 @@ const userRoutes = require("./route/user");
 
 const PORT = process.env.PORT;
 const app = express();
+const upload = multer({
+	dest: 'images'
+})
 
 connectDB();
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
+app.post("/upload", upload.single('upload'), (req, res) => {
+	console.log(req.file);
+	req.file.filename = req.file.originalname
+	console.log(req.file);
+	res.send({ message: "image is saved" })
+})
 app.get("/", (req, res) => { res.status(200).send("<h1>Home Page</h1>") });
 app.use("/todo", todoRoutes);
 app.use("/user", userRoutes);
