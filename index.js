@@ -15,8 +15,8 @@ connectDB();
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.get("/", (req, res) => { res.status(200).send("<h1>Home Page</h1>") });
-app.use("/", todoRoutes);
-app.use("/", userRoutes);
+app.use("/todo", todoRoutes);
+app.use("/user", userRoutes);
 app.get("*", (req, res) => { res.status(404).send({ message: "The url : " + `localhost:${PORT}` + req.url + " is not found", code: 404 }) })
 
 console.log(app.route)

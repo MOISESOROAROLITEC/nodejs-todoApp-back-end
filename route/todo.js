@@ -9,16 +9,16 @@ const {
 const authantification = require("../minddlewares/user");
 
 const todosRoutes = express.Router();
-todosRoutes.get("/todo/get-all", authantification, getAll);
-todosRoutes.get("/todo/userTodos", authantification, getUserTodos);
-todosRoutes.get("/todo/publicTodos", getPublicTodos);
-todosRoutes.get("/todo/getAllTodosActif", authantification, getAllTodosActif);
-todosRoutes.get("/todo/getAllTodosInactif", authantification, getAllTodosInactif);
-todosRoutes.get("/todo/getUserTodosActif", authantification, getUserTodosActif);
-todosRoutes.get("/todo/getUserTodosInactif", authantification, getUserTodosInactif);
-todosRoutes.get("/todo/getOne/:id", authantification, getOne);
-todosRoutes.delete("/todo/deleteOneTodo/:id", authantification, deleteOneTodo);
-todosRoutes.delete("/todo/deleteAllTodoOfUser", authantification, deleteAllTodoOfUser);
-todosRoutes.post("/todo/createTodo", authantification, createTodo)
+todosRoutes.get("/get-all", authantification, getAll);
+todosRoutes.get("/userTodos", authantification, getUserTodos);
+todosRoutes.get("/publicTodos", getPublicTodos);
+todosRoutes.get("/getAllTodosActif", authantification, getAllTodosActif);
+todosRoutes.get("/getAllTodosInactif", authantification, getAllTodosInactif);
+todosRoutes.get("/getUserTodosActif", authantification, getUserTodosActif);
+todosRoutes.get("/getUserTodosInactif", authantification, getUserTodosInactif);
+todosRoutes.get("/getOne/:id", authantification, getOne);
+todosRoutes.delete("/deleteOneTodo/:id", authantification, deleteOneTodo);
+todosRoutes.delete("/deleteAllTodoOfUser", authantification, deleteAllTodoOfUser);
+todosRoutes.post("/createTodo", authantification, createTodo)
 
 module.exports = todosRoutes;

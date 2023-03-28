@@ -4,9 +4,9 @@ const authantification = require("../minddlewares/user");
 
 const userRoutes = express.Router();
 
-userRoutes.post("/user/signup", signup);
-userRoutes.post("/user/signin", signin);
-userRoutes.get("/user/get/:id", authantification, get);
-userRoutes.patch("/user/update/:id", authantification, update);
+userRoutes.post("/signup", signup);
+userRoutes.post("/signin", signin);
+userRoutes.get("/get/:id", authantification, get);
+userRoutes.patch("/update/:id", authantification, update);
 
 module.exports = userRoutes;
