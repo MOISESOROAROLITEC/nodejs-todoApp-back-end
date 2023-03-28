@@ -10,8 +10,7 @@ const getAll = async (req, res) => {
 		}
 		return res.status(200).send({ todos, length: todos.length });
 	} catch (err) {
-		console.log(chalk.red(err));
-		return res.status(500).json({ message: "Error to get all todos" })
+		return res.status(500).json({ message: "Error to get all todos", err })
 	}
 }
 const getUserTodos = async (req, res) => {
@@ -24,7 +23,6 @@ const getUserTodos = async (req, res) => {
 		}
 		return res.status(200).json(todos);
 	} catch (err) {
-		console.log(chalk.red(err));
 		res.status(500).send()
 	}
 }
@@ -38,8 +36,7 @@ const getPublicTodos = async (req, res) => {
 		}
 		return res.status(200).json(todos);
 	} catch (err) {
-		console.log(chalk.red(err));
-		return res.status(500).json({ message: "server error" })
+		return res.status(500).json({ message: "server error", err })
 	}
 }
 const getOne = async (req, res) => {
@@ -52,8 +49,10 @@ const getOne = async (req, res) => {
 		}
 		res.status(200).send(todos);
 	} catch (err) {
-		console.log(chalk.red(err));
-		res.status(500).send()
+		return res.status(500).json({
+			message: "error to get todo",
+			err
+		})
 	}
 }
 const getAllTodosActif = async (req, res) => {
@@ -64,8 +63,8 @@ const getAllTodosActif = async (req, res) => {
 		}
 		res.status(200).send(todos);
 	} catch (err) {
-		console.log(chalk.red(err));
-		return res.status(500).json({ message: "Error to get all actif todos" })
+
+		return res.status(500).json({ message: "Error to get all actif todos", err })
 	}
 }
 const getAllTodosInactif = async (req, res) => {
@@ -76,8 +75,7 @@ const getAllTodosInactif = async (req, res) => {
 		}
 		res.status(200).send(todos);
 	} catch (err) {
-		console.log(chalk.red(err));
-		return res.status(500).json({ message: "Error to get all actif todos" })
+		return res.status(500).json({ message: "Error to get all actif todos", err })
 	}
 }
 const getUserTodosActif = async (req, res) => {
@@ -88,8 +86,7 @@ const getUserTodosActif = async (req, res) => {
 		}
 		res.status(200).send(todos);
 	} catch (err) {
-		console.log(chalk.red(err));
-		return res.status(500).json({ message: "Error to get all user actif todos" })
+		return res.status(500).json({ message: "Error to get all user actif todos", err })
 	}
 }
 const getUserTodosInactif = async (req, res) => {
@@ -100,8 +97,7 @@ const getUserTodosInactif = async (req, res) => {
 		}
 		res.status(200).send(todos);
 	} catch (err) {
-		console.log(chalk.red(err));
-		return res.status(500).json({ message: "Error to get all user actif todos" })
+		return res.status(500).json({ message: "Error to get all user actif todos", err })
 	}
 }
 const createTodo = async (req, res) => {
@@ -111,8 +107,7 @@ const createTodo = async (req, res) => {
 		const todoSave = await todo.save();
 		return res.status(200).json({ todo: todoSave, message: "saving succesfull" })
 	} catch (err) {
-		console.log(chalk.red(err));
-		return res.status(500).json({ message: "Tis todo can not been registering" })
+		return res.status(500).json({ message: "Tis todo can not been registering", err })
 	}
 }
 const deleteOneTodo = async (req, res) => {

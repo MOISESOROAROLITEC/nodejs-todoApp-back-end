@@ -1,7 +1,6 @@
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
-const { json } = require("stream/consumers");
 
 const signup = async (req, res) => {
 	try {
@@ -59,14 +58,12 @@ const update = async (req, res) => {
 			}
 			req.body["password"] = await bcrypt.hash(req.body["password"], 8)
 		};
-		if (!mongoose.Types.ObjectId.isValid(req.params.id))
-			return res.status(400).json({ message: "User id format is not correct" });
-		const user = await req.user.save()
+		const user = await User.updateOne({ _id: req.params.id }, req.body);
 		if (user) {
 			const { email, _id, name, createdAt, updatedAt } = user;
 			return res.status(201).json({ user: { email, _id, name, createdAt, updatedAt }, message: "user updating with success" });
 		} else {
-			return res.status(404).json({ message: `can not find user with id ${req.params.id}` });
+			return res.status(404).json({ message: `can not find user with id ${req.user.name}` });
 		}
 	} catch (error) {
 		const err = `${error}`
@@ -75,7 +72,6 @@ const update = async (req, res) => {
 }
 
 const get = async (req, res) => {
-	console.log("get user : ", req.user);
 
 	try {
 		if (!mongoose.Types.ObjectId.isValid(req.params.id))

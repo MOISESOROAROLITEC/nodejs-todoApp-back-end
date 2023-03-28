@@ -6,12 +6,12 @@ const authantification = async (req, res, next) => {
 		const authToken = req.header("Authorization").replace("Bearer ", "");
 		const decodeToken = jwt.verify(authToken, "theSecretKey");
 		const user = User.findOne({ _id: decodeToken._id, "tokens.token": authToken });
-		if (!user) throw new Error();
-		req.user = await user.w()
-		console.log("req.user : ", req.user);
+		if (!user) throw new Error("error catch, user is : " + user.toString());
+		req.user = user
 		next();
 	} catch (error) {
-		return res.status(401).json({ message: "signin before update your account" })
+		console.error(error);
+		return res.status(401).json({ message: "signin before update your account", error })
 	}
 }
 
