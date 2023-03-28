@@ -1,6 +1,7 @@
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
+const { json } = require("stream/consumers");
 
 const signup = async (req, res) => {
 	try {
@@ -9,9 +10,9 @@ const signup = async (req, res) => {
 			email: req.body.email,
 			password: req.body.password
 		});
-		userSave = await user.save();
-
-		return res.status(200).json({ user: userSave, message: "user creating success" });
+		await user.save();
+		const { email, _id, name, createdAt, updatedAt } = user;
+		return res.status(201).json({ user: { email, _id, name, createdAt, updatedAt }, message: "user creating success" });
 	} catch (error) {
 		const err = `${error}`;
 		return res.status(500).json({ message: "Error to create user", error: err });
@@ -23,14 +24,15 @@ const signin = async (req, res) => {
 		if (!email || !password) {
 			return res.status(400).json({ message: "You should provide email and password field" });
 		}
-		const user = await User.findOne({ email });
+		const user = await User.findOne({ email })
 		if (!user || user.length == 0) {
 			return res.status(400).json({ message: "Retry again, email or password are wrong" });
 		}
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (isMatch) {
 			const token = await user.generateAuthTokenAndSaveUser();
-			return res.status(200).json({ user, message: "connected with success", token });
+			const { email, _id, name, createdAt, updatedAt } = user;
+			return res.status(202).json({ user: { email, _id, name, createdAt, updatedAt }, message: "connected with success", token });
 		}
 		return res.status(400).json({ message: "Retry again, email or password are wrong" });
 	} catch (error) {
@@ -38,7 +40,6 @@ const signin = async (req, res) => {
 	}
 }
 const update = async (req, res) => {
-	console.log(req.user);
 	try {
 		const keys = Object.keys(req.body);
 		const availableKeys = ["name", "email", "password", "image"];
@@ -59,10 +60,11 @@ const update = async (req, res) => {
 			req.body["password"] = await bcrypt.hash(req.body["password"], 8)
 		};
 		if (!mongoose.Types.ObjectId.isValid(req.params.id))
-			return res.status(400).json({ message: "User id format is not correct" })
+			return res.status(400).json({ message: "User id format is not correct" });
 		const user = await req.user.save()
 		if (user) {
-			return res.status(200).json({ user, message: "user updating with success" });
+			const { email, _id, name, createdAt, updatedAt } = user;
+			return res.status(201).json({ user: { email, _id, name, createdAt, updatedAt }, message: "user updating with success" });
 		} else {
 			return res.status(404).json({ message: `can not find user with id ${req.params.id}` });
 		}
