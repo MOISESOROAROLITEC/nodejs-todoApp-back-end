@@ -60,11 +60,7 @@ const update = async (req, res) => {
 		};
 		if (!mongoose.Types.ObjectId.isValid(req.params.id))
 			return res.status(400).json({ message: "User id format is not correct" })
-		// const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
-		const reqUser = req.user;
-		reqUser.name = "defname"
-		const user = await reqUser.save()
-		// const user = req.user.updateOne()
+		const user = await req.user.save()
 		if (user) {
 			return res.status(200).json({ user, message: "user updating with success" });
 		} else {
@@ -80,7 +76,6 @@ const get = async (req, res) => {
 	console.log("get user : ", req.user);
 
 	try {
-		// return await res.send(req.user)
 		if (!mongoose.Types.ObjectId.isValid(req.params.id))
 			return res.status(400).json({ message: "user id format is not correct" })
 		const user = await User.findById(req.params.id)

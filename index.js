@@ -39,9 +39,3 @@ app.listen(PORT, () => {
 		console.log(chalk.blue(`${chalk.bold(methode)} : localhost:${PORT}${route}`));
 	})
 });
-
-// async function token() {
-// 	const token = await jwt.sign({ _id: "soropass" }, "theSecretKey", { expiresIn: '7 days' });
-// 	console.log("token is : ", token);
-// }
-// token();
